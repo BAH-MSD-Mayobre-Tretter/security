@@ -1,4 +1,4 @@
-package com.webage.util;
+package com.bah.msd.security.util;
 
 import java.util.Date;
 import java.util.Map;

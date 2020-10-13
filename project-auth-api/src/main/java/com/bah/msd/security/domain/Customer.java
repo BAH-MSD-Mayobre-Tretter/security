@@ -1,4 +1,4 @@
-package com.webage.domain;
+package com.bah.msd.security.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

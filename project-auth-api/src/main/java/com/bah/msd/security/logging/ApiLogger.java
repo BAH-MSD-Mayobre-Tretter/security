@@ -1,4 +1,4 @@
-package com.webage.logging;
+package com.bah.msd.security.logging;
 
 public class ApiLogger {
 	private static String module = "na";

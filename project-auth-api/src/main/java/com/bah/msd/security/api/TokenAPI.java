@@ -1,4 +1,4 @@
-package com.webage.api;
+package com.bah.msd.security.api;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.webage.domain.Customer;
-import com.webage.domain.CustomerFactory;
-import com.webage.domain.Token;
-import com.webage.util.JWTHelper;
+import com.bah.msd.security.domain.Customer;
+import com.bah.msd.security.domain.CustomerFactory;
+import com.bah.msd.security.domain.Token;
+import com.bah.msd.security.util.JWTHelper;
 
 @RestController
 @RequestMapping("/token")
@@ -34,7 +34,7 @@ public class TokenAPI {
 	@PostMapping
 	// public ResponseEntity<?> createTokenForCustomer(@RequestBody Customer customer, HttpRequest request, UriComponentsBuilder uri) {
 	public ResponseEntity<?> createTokenForCustomer(@RequestBody Customer customer) {
-		
+		System.out.println("create token for customer: " + customer);
 		String username = customer.getName();
 		String password = customer.getPassword();
 		
@@ -48,7 +48,10 @@ public class TokenAPI {
 		
 	}
 	
-	private boolean checkPassword(String username, String password) {
+	// this method should be calling the method service
+	
+	private boolean checkPassword(String username, String password) { 
+		System.out.println("username: " + username + " and password: " + password);
 		// special case for application user
 		if(username.equals("ApiClientApp") && password.equals("secret")) {
 			return true;

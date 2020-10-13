@@ -1,4 +1,4 @@
-package com.webage.api;
+package com.bah.msd.security.api;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.webage.domain.Customer;
-import com.webage.domain.CustomerFactory;
-import com.webage.domain.Token;
+import com.bah.msd.security.domain.Customer;
+import com.bah.msd.security.domain.CustomerFactory;
+import com.bah.msd.security.domain.Token;
 
 @RestController
 @RequestMapping("/register")
