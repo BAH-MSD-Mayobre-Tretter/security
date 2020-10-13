@@ -1,4 +1,4 @@
-package com.example.api;
+package com.bah.msd.security;
 
 public interface JWTUtil {
 	public boolean verifyToken(String jwt_token);
