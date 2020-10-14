@@ -40,6 +40,7 @@ public class TokenAPI {
 		String username = customer.getName();
 		String password = customer.getPassword();
 		
+		
 		if (username != null && username.length() > 0 && password != null && password.length() > 0 && checkPassword(username, password)) {
 			Token token = createToken(username);
 			ResponseEntity<?> response = ResponseEntity.ok(token);
@@ -47,6 +48,10 @@ public class TokenAPI {
 			return response;			
 		}
 		// bad request
+		
+		System.out.println("username is " + username);
+		System.out.println("password is " + password);
+		
 		return (ResponseEntity<?>) ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		
 	}
