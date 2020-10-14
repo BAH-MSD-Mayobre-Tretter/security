@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Iterator;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +19,7 @@ import com.bah.msd.security.domain.Customer;
 import com.bah.msd.security.domain.CustomerFactory;
 import com.bah.msd.security.domain.Token;
 import com.bah.msd.security.util.JWTHelper;
+
 
 @RestController
 @RequestMapping("/token")
@@ -97,7 +97,7 @@ public class TokenAPI {
 	}
 	
     private static Token createToken(String username) {
-    	String scopes = "com.webage.data.apis";
+    	String scopes = "com.api.customer.r";
     	// special case for application user
     	if( username.equalsIgnoreCase("ApiClientApp")) {
     		scopes = "com.webage.auth.apis";
