@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,15 +70,15 @@ public class TokenAPI {
 		return false;
 		
 		// local version of the above code, gets customer from repository
-		/*
-		Iterator<Customer> customers = repo.findAll().iterator();
-		while(customers.hasNext()) {
-			Customer cust = customers.next();
-			if(cust.getName().equals(username) && cust.getPassword().equals(password)) {
-				return true;				
-			}
-		}
-		*/
+		
+//		Iterator<Customer> customers = repo.findAll().iterator();
+//		while(customers.hasNext()) {
+//			Customer cust = customers.next();
+//			if(cust.getName().equals(username) && cust.getPassword().equals(password)) {
+//				return true;				
+//			}
+//		}
+		
 		
 
 	}
