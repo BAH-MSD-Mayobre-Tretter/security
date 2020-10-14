@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.bah.msd.security.domain.Customer;
 import com.bah.msd.security.domain.CustomerFactory;
@@ -28,19 +30,20 @@ public class TokenAPI {
 	
 	@GetMapping
 	public String getAll() {
+		System.out.println("getAll");
 		return "jwt-fake-token-asdfasdfasfa".toString();
 	}
 	
 	@PostMapping
-	// public ResponseEntity<?> createTokenForCustomer(@RequestBody Customer customer, HttpRequest request, UriComponentsBuilder uri) {
+//	 public ResponseEntity<?> createTokenForCustomer(@RequestBody Customer customer, HttpRequest request, UriComponentsBuilder uri) {
 	public ResponseEntity<?> createTokenForCustomer(@RequestBody Customer customer) {
-		System.out.println("create token for customer: " + customer);
 		String username = customer.getName();
 		String password = customer.getPassword();
 		
 		if (username != null && username.length() > 0 && password != null && password.length() > 0 && checkPassword(username, password)) {
 			Token token = createToken(username);
 			ResponseEntity<?> response = ResponseEntity.ok(token);
+			System.out.println("create token for customer: " + customer);
 			return response;			
 		}
 		// bad request
