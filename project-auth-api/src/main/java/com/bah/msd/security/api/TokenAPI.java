@@ -116,11 +116,23 @@ public class TokenAPI {
 		try {
 
 			URL url = new URL("http://localhost:8080/api/customers/byname/" + username);
+			
+			
+			System.out.println("Breadcrumbs for getCustomerByNameFromCustomerAPI");
+			System.out.println("Generate URL at " + url);
+			
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json");
 			Token token = getAppUserToken();
+			
+			System.out.println("Generated token is " + token);
+			
 			conn.setRequestProperty("authorization", "Bearer " + token.getToken());
+			
+			System.out.println("Created connection is " + conn);
+			System.out.println("Response code for connection is " + conn.getResponseCode());
+
 
 			if (conn.getResponseCode() != 200) {
 				return null;
