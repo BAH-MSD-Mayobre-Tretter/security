@@ -5,8 +5,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Iterator;
 
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.bah.msd.security.domain.Customer;
 import com.bah.msd.security.domain.CustomerFactory;
@@ -25,52 +26,54 @@ import com.bah.msd.security.util.JWTHelper;
 @RequestMapping("/token")
 public class TokenAPI {
 
-	//private static Key key = AuthFilter.key;	
+	// private static Key key = AuthFilter.key;
 	public static Token appUserToken;
-	
+
 	@GetMapping
 	public String getAll() {
 		System.out.println("getAll");
 		return "jwt-fake-token-asdfasdfasfa".toString();
 	}
-	
+
 	@PostMapping
 //	 public ResponseEntity<?> createTokenForCustomer(@RequestBody Customer customer, HttpRequest request, UriComponentsBuilder uri) {
 	public ResponseEntity<?> createTokenForCustomer(@RequestBody Customer customer) {
 		String username = customer.getName();
 		String password = customer.getPassword();
-		
-		if (username != null && username.length() > 0 && password != null && password.length() > 0 && checkPassword(username, password)) {
+
+		if (username != null && username.length() > 0 && password != null && password.length() > 0
+				&& checkPassword(username, password)) {
 			Token token = createToken(username);
 			ResponseEntity<?> response = ResponseEntity.ok(token);
 			System.out.println("create token for customer: " + customer);
-			return response;			
+			return response;
 		}
 		// bad request
+		System.out.println("request failed!! username: " + username + " password: " + password);
 		return (ResponseEntity<?>) ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-		
+
 	}
-	
+
 	// this method should be calling the method service
-	
-	private boolean checkPassword(String username, String password) { 
+
+	private boolean checkPassword(String username, String password) {
 		System.out.println("username: " + username + " and password: " + password);
 		// special case for application user
-		if(username.equals("ApiClientApp") && password.equals("secret")) {
+		if (username.equals("ApiClientApp") && password.equals("secret")) {
 			return true;
 		}
-		// make call to customer service 
+		// make call to customer service
 		Customer cust = getCustomerByNameFromCustomerAPI(username);
-		
+
 		// compare name and password
-		if(cust != null && cust.getName().equals(username) && cust.getPassword().equals(password)) {
-			return true;				
-		}	
+		if (cust != null && cust.getName().equals(username) && cust.getPassword().equals(password)) {
+			return true;
+		}
 		RestTemplate restClient;
 		return false;
-		
+
 		// local version of the above code, gets customer from repository
-		
+
 //		Iterator<Customer> customers = repo.findAll().iterator();
 //		while(customers.hasNext()) {
 //			Customer cust = customers.next();
@@ -78,40 +81,37 @@ public class TokenAPI {
 //				return true;				
 //			}
 //		}
-		
-		
 
 	}
-	
+
 	public static Token getAppUserToken() {
-		if(appUserToken == null || appUserToken.getToken() == null || appUserToken.getToken().length() == 0) {
+		if (appUserToken == null || appUserToken.getToken() == null || appUserToken.getToken().length() == 0) {
 			appUserToken = createToken("ApiClientApp");
 		}
 		System.out.println("app user token = " + appUserToken);
 		return appUserToken;
 	}
-	
-    private static Token createToken(String username) {
-    	String scopes = "com.webage.data.apis";
-    	// special case for application user
-    	if( username.equalsIgnoreCase("ApiClientApp")) {
-    		scopes = "com.webage.auth.apis";
-    	}
-    	String token_string = JWTHelper.createToken(scopes);
-    	
-		/*
-		 * long fiveHoursInMillis = 1000 * 60 *60 * 5;
-		 * 
-		 * String token_string = Jwts.builder() .setSubject(username)
-		 * .setIssuer("me@me.com") .claim("scopes",scopes) .setExpiration(new
-		 * Date(System.currentTimeMillis() + fiveHoursInMillis)) .signWith(key)
-		 * .compact();
-		 */
-    	System.out.println("token created!!! token: " + token_string);
-    	return new Token(token_string);
-    }
-    
-    
+
+	private static Token createToken(String username) {
+		String scopes = "com.webage.data.apis";
+		// special case for application user
+		if (username.equalsIgnoreCase("ApiClientApp")) {
+			scopes = "com.webage.auth.apis";
+		}
+		String token_string = JWTHelper.createToken(scopes);
+
+		
+//		 long fiveHoursInMillis = 1000 * 60 *60 * 5;
+//		 
+//		 String token_string = Jwts.builder() .setSubject(username)
+//		 .setIssuer("me@me.com") .claim("scopes",scopes) .setExpiration(new
+//		 Date(System.currentTimeMillis() + fiveHoursInMillis)) .signWith(key)
+//		 .compact();
+		 
+		System.out.println("token created!!! token: " + token_string);
+		return new Token(token_string);
+	}
+
 	private Customer getCustomerByNameFromCustomerAPI(String username) {
 		try {
 
@@ -145,7 +145,6 @@ public class TokenAPI {
 			return null;
 		}
 
-	}  	
+	}
 
-}    
-
+}
