@@ -6,7 +6,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.client.RestTemplate;
 
 import com.bah.msd.security.domain.Customer;
 import com.bah.msd.security.domain.CustomerFactory;
@@ -65,7 +64,8 @@ public class TokenAPI {
 		// compare name and password
 		if(cust != null && cust.getName().equals(username) && cust.getPassword().equals(password)) {
 			return true;				
-		}		
+		}	
+		RestTemplate restClient;
 		return false;
 		
 		// local version of the above code, gets customer from repository
@@ -86,6 +86,7 @@ public class TokenAPI {
 		if(appUserToken == null || appUserToken.getToken() == null || appUserToken.getToken().length() == 0) {
 			appUserToken = createToken("ApiClientApp");
 		}
+		System.out.println("app user token = " + appUserToken);
 		return appUserToken;
 	}
 	
@@ -105,7 +106,7 @@ public class TokenAPI {
 		 * Date(System.currentTimeMillis() + fiveHoursInMillis)) .signWith(key)
 		 * .compact();
 		 */
-    	
+    	System.out.println("token created!!! token: " + token_string);
     	return new Token(token_string);
     }
     
@@ -130,6 +131,7 @@ public class TokenAPI {
 					output += out;
 				}
 				conn.disconnect();
+				System.out.println("Security API was able to get customer name from Customer API!!!");
 				return CustomerFactory.getCustomer(output);
 			}
 
