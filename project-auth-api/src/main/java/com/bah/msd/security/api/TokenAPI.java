@@ -40,16 +40,29 @@ public class TokenAPI {
 	public ResponseEntity<?> createTokenForCustomer(@RequestBody Customer customer) {
 		String username = customer.getName();
 		String password = customer.getPassword();
+<<<<<<< HEAD
 
 		if (username != null && username.length() > 0 && password != null && password.length() > 0
 				&& checkPassword(username, password)) {
+=======
+		
+		
+		if (username != null && username.length() > 0 && password != null && password.length() > 0 && checkPassword(username, password)) {
+>>>>>>> fe27ab0b414c7a02b17a8d06fa9a73e5eebff921
 			Token token = createToken(username);
 			ResponseEntity<?> response = ResponseEntity.ok(token);
 			System.out.println("create token for customer: " + customer);
 			return response;
 		}
 		// bad request
+<<<<<<< HEAD
 		System.out.println("request failed!! username: " + username + " password: " + password);
+=======
+		
+		System.out.println("username is " + username);
+		System.out.println("password is " + password);
+		
+>>>>>>> fe27ab0b414c7a02b17a8d06fa9a73e5eebff921
 		return (ResponseEntity<?>) ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
 	}
