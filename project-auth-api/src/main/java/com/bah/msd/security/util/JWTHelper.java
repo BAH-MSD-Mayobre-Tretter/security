@@ -10,12 +10,14 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.bah.msd.security.domain.Token;
 
 public class JWTHelper {
 	/*
 	 * https://github.com/auth0/java-jwt
 	 */
-	public static String createToken(String scopes) {
+	
+	public Token createToken(String scopes) {
 		
 		try {
 		    Algorithm algorithm = Algorithm.HMAC256("secret");
@@ -27,7 +29,7 @@ public class JWTHelper {
 		        .withClaim("scopes", scopes)
 		        .withExpiresAt(expireDate)
 		        .sign(algorithm);
-		    return token;
+		    return new Token(token);
 		} catch (JWTCreationException exception){
 			return null;
 		}	
