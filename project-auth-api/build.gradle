@@ -4,7 +4,7 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'maven'
 apply plugin: 'application'
 
-group = 'com.webage.spring.samples'
+group = 'com.bah.msd'
 version = '0.0.1-SNAPSHOT'
 
 description = "Project-Auth-APIs"

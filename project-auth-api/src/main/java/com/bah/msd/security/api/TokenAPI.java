@@ -100,7 +100,7 @@ public class TokenAPI {
     	String scopes = "com.bah.msd.customerapi.api";
     	// special case for application user
     	if( username.equalsIgnoreCase("ApiClientApp")) {
-    		scopes = "com.webage.auth.apis";
+    		scopes = "com.bah.msd.customerapi.api";
     	}
     	Token token = (Token) JWTHelper.createToken(scopes);
     	
