@@ -17,7 +17,7 @@ public class JWTHelper {
 	 * https://github.com/auth0/java-jwt
 	 */
 	
-	public Token createToken(String scopes) {
+	public static Token createToken(String scopes) {
 		
 		try {
 		    Algorithm algorithm = Algorithm.HMAC256("secret");

@@ -97,12 +97,12 @@ public class TokenAPI {
 	}
 	
     private static Token createToken(String username) {
-    	String scopes = "com.api.customer.r";
+    	String scopes = "com.bah.msd.customerapi.api";
     	// special case for application user
     	if( username.equalsIgnoreCase("ApiClientApp")) {
     		scopes = "com.webage.auth.apis";
     	}
-    	String token_string = JWTHelper.createToken(scopes);
+    	Token token = (Token) JWTHelper.createToken(scopes);
     	
 		/*
 		 * long fiveHoursInMillis = 1000 * 60 *60 * 5;
@@ -112,8 +112,8 @@ public class TokenAPI {
 		 * Date(System.currentTimeMillis() + fiveHoursInMillis)) .signWith(key)
 		 * .compact();
 		 */
-    	System.out.println("token created!!! token: " + token_string);
-    	return new Token(token_string);
+    	System.out.println("token created!!! token: " + token.toString());
+    	return token;
     }
     
     
