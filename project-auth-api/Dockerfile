@@ -21,5 +21,5 @@ ARG targethost=localhost:8090
 ENV API_host=$targethost
 VOLUME /tmp
 ARG LIBS=app/build/libs
-COPY --from=builder ${LIBS}/ /app/libs
-ENTRYPOINT ["java","-jar","./app/libs/security-auth-0.0.1-SNAPSHOT.jar"]
+COPY --from=builder ${LIBS}/ /app/lib
+ENTRYPOINT ["java","-jar","./app/lib/security-auth-0.0.1-SNAPSHOT.jar"]
