@@ -119,12 +119,21 @@ public class TokenAPI {
     
 	private Customer getCustomerByNameFromCustomerAPI(String username) {
 		try {
+			
+		// Get the value of the API_Host from the Environment
+			String apiHost = System.getenv("API_HOST");
+			
+			// default to generic localhost:8080
+			if(apiHost == null) {
+				apiHost = "localhost:8080";
+			}
 
-			URL url = new URL("http://localhost:8080/api/customers/byname/" + username);
+		// Dynamic insertion of apiHost value	
+			URL url = new URL("http://" + apiHost + "/api/customers/byname/" + username);	
 			
 			
 		//	System.out.println("Breadcrumbs for getCustomerByNameFromCustomerAPI");
-		//	System.out.println("Generate URL at " + url);
+			System.out.println("Generated URL is " + url);
 			
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
