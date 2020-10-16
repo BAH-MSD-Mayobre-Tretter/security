@@ -1,0 +1,478 @@
+osboxes@osboxes:~/project/security/project-auth-api$ gedit Dockerfile
+osboxes@osboxes:~/project/security/project-auth-api$ docker build -t auth-api:v1.0 .
+Sending build context to Docker daemon  55.39MB
+Step 1/12 : FROM gradle:jdk10 as builder
+jdk10: Pulling from library/gradle
+16e82e17faef: Pull complete 
+117dc02416a3: Pull complete 
+7e4c717259ac: Pull complete 
+7a518b8f48be: Pull complete 
+add32d44f708: Pull complete 
+a0158fa08543: Pull complete 
+9eb8cb7aab26: Pull complete 
+a9448aba0bc3: Pull complete 
+41c8e6e10ef9: Pull complete 
+2577240d36fe: Pull complete 
+Digest: sha256:9c734387d65f05e051ed4d7c833f3e5443933c9896d93e5fbeab9a0f88f2756b
+Status: Downloaded newer image for gradle:jdk10
+ ---> 76c6cec60058
+Step 2/12 : COPY --chown=gradle:gradle . /app
+ ---> a9b279f191f7
+Step 3/12 : WORKDIR /app
+ ---> Running in e62b18e5c92c
+Removing intermediate container e62b18e5c92c
+ ---> 369159953732
+Step 4/12 : RUN gradle bootJar
+ ---> Running in ee0e904cf3e0
+
+Welcome to Gradle 4.10.2!
+
+Here are the highlights of this release:
+ - Incremental Java compilation by default
+ - Periodic Gradle caches cleanup
+ - Gradle Kotlin DSL 1.0-RC6
+ - Nested included builds
+ - SNAPSHOT plugin versions in the `plugins {}` block
+
+For more details see https://docs.gradle.org/4.10.2/release-notes.html
+
+Starting a Gradle Daemon (subsequent builds will be faster)
+> Task :compileJava
+> Task :processResources
+> Task :classes
+> Task :bootJar
+
+BUILD SUCCESSFUL in 1m 18s
+3 actionable tasks: 3 executed
+Removing intermediate container ee0e904cf3e0
+ ---> 90f580e93aaa
+Step 5/12 : FROM openjdk:8-jdk-alpine
+ ---> a3562aa0b991
+Step 6/12 : EXPOSE 8081
+ ---> Running in f8b84102a815
+Removing intermediate container f8b84102a815
+ ---> ab95fd0b7e82
+Step 7/12 : VOLUME /tmp
+ ---> Running in 4c10858d10a5
+Removing intermediate container 4c10858d10a5
+ ---> 2a224ccb2d00
+Step 8/12 : ARG targethost=localhost:8080
+ ---> Running in d352ffcb8c29
+Removing intermediate container d352ffcb8c29
+ ---> b07c39df8514
+Step 9/12 : ENV API_HOST=$targethost
+ ---> Running in e464474f5280
+Removing intermediate container e464474f5280
+ ---> 5f52ece95da0
+Step 10/12 : ARG LIBS=app/build/libs
+ ---> Running in 127f1ef2bf5a
+Removing intermediate container 127f1ef2bf5a
+ ---> 7f8630b3ccea
+Step 11/12 : COPY --from=builder ${LIBS}/ /app/lib
+ ---> 6a9aee901d1f
+Step 12/12 : ENTRYPOINT ["java","-jar","./app/lib/security-auth-0.0.1-SNAPSHOT.jar"]
+ ---> Running in 161039841f1b
+Removing intermediate container 161039841f1b
+ ---> 1775bf32e24d
+Successfully built 1775bf32e24d
+Successfully tagged auth-api:v1.0
+osboxes@osboxes:~/project/security/project-auth-api$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
+auth-api            v1.0                1775bf32e24d        About a minute ago   148MB
+<none>              <none>              90f580e93aaa        About a minute ago   1.19GB
+customer-api        v1.0                aa5fe6ada47f        27 minutes ago       142MB
+gradle              6.6.1-jdk8          6ac2d4d8bb65        2 days ago           574MB
+openjdk             8-jdk-alpine        a3562aa0b991        17 months ago        105MB
+gradle              jdk10               76c6cec60058        23 months ago        1.08GB
+osboxes@osboxes:~/project/security/project-auth-api$ docker rmi 1775bf32e24d
+Untagged: auth-api:v1.0
+Deleted: sha256:1775bf32e24d53bbebcfbf362c5c7e3a1b66433b1d911e88f11dbb8b924647b8
+Deleted: sha256:6a9aee901d1feaeac08c641cbd71b8d8caf645d358557ef33dc484d08f9a3860
+Deleted: sha256:888e8491a6f72c044bf3af7a3ba9fe811ab2aef8b3974bf37d8d8739deb39d6e
+Deleted: sha256:7f8630b3cceacc4992e54e6eed82939e1b97278c3bc54203bb04fb635727c260
+Deleted: sha256:5f52ece95da0770382aa4edba5b91554c9b280ddea8525bcaa9b55f18de2d6cd
+Deleted: sha256:b07c39df851405debe128c2f3b7fa2170f43c552e8e20d01cac70c5889b2d8e2
+Deleted: sha256:2a224ccb2d004c65f5c2d202919e5496194dedd8e1fb048e9c988044f0aa3506
+Deleted: sha256:ab95fd0b7e8274349f607988adf5e12fc5d95c23c6ecbea0bfb0737a729802d3
+osboxes@osboxes:~/project/security/project-auth-api$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
+<none>              <none>              90f580e93aaa        About a minute ago   1.19GB
+customer-api        v1.0                aa5fe6ada47f        28 minutes ago       142MB
+gradle              6.6.1-jdk8          6ac2d4d8bb65        2 days ago           574MB
+openjdk             8-jdk-alpine        a3562aa0b991        17 months ago        105MB
+gradle              jdk10               76c6cec60058        23 months ago        1.08GB
+osboxes@osboxes:~/project/security/project-auth-api$ docker build -t auth-api:v1.0 .
+Sending build context to Docker daemon  55.39MB
+Step 1/12 : FROM gradle:jdk10 as builder
+ ---> 76c6cec60058
+Step 2/12 : COPY --chown=gradle:gradle . /app
+ ---> Using cache
+ ---> a9b279f191f7
+Step 3/12 : WORKDIR /app
+ ---> Using cache
+ ---> 369159953732
+Step 4/12 : RUN gradle bootJar
+ ---> Using cache
+ ---> 90f580e93aaa
+Step 5/12 : FROM openjdk:8-jdk-alpine
+ ---> a3562aa0b991
+Step 6/12 : EXPOSE 8081
+ ---> Running in 767229070d32
+Removing intermediate container 767229070d32
+ ---> 510b9ec4b619
+Step 7/12 : VOLUME /tmp
+ ---> Running in 87beac63a854
+Removing intermediate container 87beac63a854
+ ---> d90cf3259e9e
+Step 8/12 : ARG targethost=localhost:8080
+ ---> Running in 3ed24e6a212f
+Removing intermediate container 3ed24e6a212f
+ ---> ec23cbbdb5b1
+Step 9/12 : ENV API_HOST=$targethost
+ ---> Running in 94d98ea63e97
+Removing intermediate container 94d98ea63e97
+ ---> 64a7d5a1bff5
+Step 10/12 : ARG LIBS=app/build/libs
+ ---> Running in 739177d5eafe
+Removing intermediate container 739177d5eafe
+ ---> f0a798e6a703
+Step 11/12 : COPY --from=builder ${LIBS}/ /app/lib
+ ---> f872b1185b28
+Step 12/12 : ENTRYPOINT ["java","-jar","./app/lib/security-auth-0.0.1-SNAPSHOT.jar"]
+ ---> Running in d2450788a8ef
+Removing intermediate container d2450788a8ef
+ ---> afff2851309c
+Successfully built afff2851309c
+Successfully tagged auth-api:v1.0
+osboxes@osboxes:~/project/security/project-auth-api$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
+auth-api            v1.0                afff2851309c        4 seconds ago        148MB
+<none>              <none>              90f580e93aaa        About a minute ago   1.19GB
+customer-api        v1.0                aa5fe6ada47f        28 minutes ago       142MB
+gradle              6.6.1-jdk8          6ac2d4d8bb65        2 days ago           574MB
+openjdk             8-jdk-alpine        a3562aa0b991        17 months ago        105MB
+gradle              jdk10               76c6cec60058        23 months ago        1.08GB
+osboxes@osboxes:~/project/security/project-auth-api$ ^C
+osboxes@osboxes:~/project/security/project-auth-api$ docker rmi 90f580e93aaa
+Deleted: sha256:90f580e93aaa8f235f05e6a97005637838e9fa5d364b47f815d20e76decc2dcc
+Deleted: sha256:a2fcc6b05593ca498d5ea8b2c1e884be03dbb7d42cd5b2969b1f07016048e967
+Deleted: sha256:369159953732be10d793b93c515fcb77318fedc8b0ae4655a7bbbea8f87d24c9
+Deleted: sha256:a9b279f191f75b5e32b409afc65c024270608fe1a2c79a6ce5b367db2e150fe1
+Deleted: sha256:20a97d01bff94bc936e85a0e32fbf36813f3c34dbb0bed2bd2103a92948657eb
+osboxes@osboxes:~/project/security/project-auth-api$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+auth-api            v1.0                afff2851309c        23 seconds ago      148MB
+customer-api        v1.0                aa5fe6ada47f        28 minutes ago      142MB
+gradle              6.6.1-jdk8          6ac2d4d8bb65        2 days ago          574MB
+openjdk             8-jdk-alpine        a3562aa0b991        17 months ago       105MB
+gradle              jdk10               76c6cec60058        23 months ago       1.08GB
+osboxes@osboxes:~/project/security/project-auth-api$ docker inspect auth-api:v1.0
+[
+    {
+        "Id": "sha256:afff2851309c08e7f0778ec9f442df05f74014a93b5c87a5e4741cbd1e7fe59d",
+        "RepoTags": [
+            "auth-api:v1.0"
+        ],
+        "RepoDigests": [],
+        "Parent": "sha256:f872b1185b2856cd3275efe17496c0213a8e54929f79d84749a397f7cc75746b",
+        "Comment": "",
+        "Created": "2020-10-16T17:36:35.200633453Z",
+        "Container": "d2450788a8ef1e8cec2427169eeaf4a30eaf34b4b9915cdb6680ada2d07e6d8a",
+        "ContainerConfig": {
+            "Hostname": "d2450788a8ef",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "8081/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openjdk/bin",
+                "LANG=C.UTF-8",
+                "JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk",
+                "JAVA_VERSION=8u212",
+                "JAVA_ALPINE_VERSION=8.212.04-r0",
+                "API_HOST=localhost:8080"
+            ],
+            "Cmd": [
+                "/bin/sh",
+                "-c",
+                "#(nop) ",
+                "ENTRYPOINT [\"java\" \"-jar\" \"./app/lib/security-auth-0.0.1-SNAPSHOT.jar\"]"
+            ],
+            "Image": "sha256:f872b1185b2856cd3275efe17496c0213a8e54929f79d84749a397f7cc75746b",
+            "Volumes": {
+                "/tmp": {}
+            },
+            "WorkingDir": "",
+            "Entrypoint": [
+                "java",
+                "-jar",
+                "./app/lib/security-auth-0.0.1-SNAPSHOT.jar"
+            ],
+            "OnBuild": null,
+            "Labels": {}
+        },
+        "DockerVersion": "19.03.6",
+        "Author": "",
+        "Config": {
+            "Hostname": "",
+            "Domainname": "",
+            "User": "",
+            "AttachStdin": false,
+            "AttachStdout": false,
+            "AttachStderr": false,
+            "ExposedPorts": {
+                "8081/tcp": {}
+            },
+            "Tty": false,
+            "OpenStdin": false,
+            "StdinOnce": false,
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/jvm/java-1.8-openjdk/jre/bin:/usr/lib/jvm/java-1.8-openjdk/bin",
+                "LANG=C.UTF-8",
+                "JAVA_HOME=/usr/lib/jvm/java-1.8-openjdk",
+                "JAVA_VERSION=8u212",
+                "JAVA_ALPINE_VERSION=8.212.04-r0",
+                "API_HOST=localhost:8080"
+            ],
+            "Cmd": null,
+            "Image": "sha256:f872b1185b2856cd3275efe17496c0213a8e54929f79d84749a397f7cc75746b",
+            "Volumes": {
+                "/tmp": {}
+            },
+            "WorkingDir": "",
+            "Entrypoint": [
+                "java",
+                "-jar",
+                "./app/lib/security-auth-0.0.1-SNAPSHOT.jar"
+            ],
+            "OnBuild": null,
+            "Labels": null
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 148167583,
+        "VirtualSize": 148167583,
+        "GraphDriver": {
+            "Data": {
+                "LowerDir": "/var/lib/docker/overlay2/80fa73ec738ae35a06802c3852b0cdb6e9b206103ce2d27c8987f7f30031c05d/diff:/var/lib/docker/overlay2/c2adbded6e909f95a1523fa1db1842e0377a80c7ac98a570137cf249079d57dc/diff:/var/lib/docker/overlay2/bf77c4170fad36a8fcee29c91f3478c42ec6033bcb302e18d4d5cb89106e2d0d/diff",
+                "MergedDir": "/var/lib/docker/overlay2/050e7cd4f9d6c2b8cc01b69edf933a7304cdf08e932badf52046cd625cb96c98/merged",
+                "UpperDir": "/var/lib/docker/overlay2/050e7cd4f9d6c2b8cc01b69edf933a7304cdf08e932badf52046cd625cb96c98/diff",
+                "WorkDir": "/var/lib/docker/overlay2/050e7cd4f9d6c2b8cc01b69edf933a7304cdf08e932badf52046cd625cb96c98/work"
+            },
+            "Name": "overlay2"
+        },
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:f1b5933fe4b5f49bbe8258745cf396afe07e625bdab3168e364daf7c956b6b81",
+                "sha256:9b9b7f3d56a01e3d9076874990c62e7a516cc4032f784f421574d06b18ef9aa4",
+                "sha256:ceaf9e1ebef5f9eaa707a838848a3c13800fcf32d7757be10d4b08fb85f1bc8a",
+                "sha256:128b1b7cd31607675c9ed1ea37133c56242f9251dbf62dcbec75cc6a52e5482d"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2020-10-16T13:36:35.315637086-04:00"
+        }
+    }
+]
+osboxes@osboxes:~/project/security/project-auth-api$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+e637f198fce7        customer-api:v1.0   "java -jar ./app/lib…"   23 minutes ago      Up 23 minutes       0.0.0.0:8080->8080/tcp   customer-api
+osboxes@osboxes:~/project/security/project-auth-api$ docker create network mcc-network
+Unable to find image 'network:latest' locally
+Error response from daemon: pull access denied for network, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+osboxes@osboxes:~/project/security/project-auth-api$ docker network create mcc-network
+19889904902ca5eb17e9543c49fcc9287ccf1e7b1ae07390e3552634a58fdcd7
+osboxes@osboxes:~/project/security/project-auth-api$ docker network ls
+NETWORK ID          NAME                DRIVER              SCOPE
+23ccd4d5d20d        bridge              bridge              local
+cc8274c6f31f        host                host                local
+19889904902c        mcc-network         bridge              local
+1c9cc63dce51        none                null                local
+osboxes@osboxes:~/project/security/project-auth-api$ docker inspect mcc-network
+[
+    {
+        "Name": "mcc-network",
+        "Id": "19889904902ca5eb17e9543c49fcc9287ccf1e7b1ae07390e3552634a58fdcd7",
+        "Created": "2020-10-16T13:38:28.014398847-04:00",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {},
+        "Options": {},
+        "Labels": {}
+    }
+]
+osboxes@osboxes:~/project/security/project-auth-api$ docker network mcc-network add customer-api
+
+Usage:	docker network COMMAND
+
+Manage networks
+
+Commands:
+  connect     Connect a container to a network
+  create      Create a network
+  disconnect  Disconnect a container from a network
+  inspect     Display detailed information on one or more networks
+  ls          List networks
+  prune       Remove all unused networks
+  rm          Remove one or more networks
+
+Run 'docker network COMMAND --help' for more information on a command.
+osboxes@osboxes:~/project/security/project-auth-api$ docker network mcc-network connect customer-api
+
+Usage:	docker network COMMAND
+
+Manage networks
+
+Commands:
+  connect     Connect a container to a network
+  create      Create a network
+  disconnect  Disconnect a container from a network
+  inspect     Display detailed information on one or more networks
+  ls          List networks
+  prune       Remove all unused networks
+  rm          Remove one or more networks
+
+Run 'docker network COMMAND --help' for more information on a command.
+osboxes@osboxes:~/project/security/project-auth-api$ docker network connect mcc-network customer-api
+osboxes@osboxes:~/project/security/project-auth-api$ docker inspect mcc-network
+[
+    {
+        "Name": "mcc-network",
+        "Id": "19889904902ca5eb17e9543c49fcc9287ccf1e7b1ae07390e3552634a58fdcd7",
+        "Created": "2020-10-16T13:38:28.014398847-04:00",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "e637f198fce7bd4842a4a52a5d996e41824e206d73b44d5c1790ecbd64e7a8cb": {
+                "Name": "customer-api",
+                "EndpointID": "1abfe9d463a6c71c8b472cec174ad2a90c77dae1128818f2b218f5723005e3ec",
+                "MacAddress": "02:42:ac:12:00:02",
+                "IPv4Address": "172.18.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {}
+    }
+]
+osboxes@osboxes:~/project/security/project-auth-api$ docker images
+dREPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+auth-api            v1.0                afff2851309c        5 minutes ago       148MB
+customer-api        v1.0                aa5fe6ada47f        33 minutes ago      142MB
+gradle              6.6.1-jdk8          6ac2d4d8bb65        2 days ago          574MB
+openjdk             8-jdk-alpine        a3562aa0b991        17 months ago       105MB
+gradle              jdk10               76c6cec60058        23 months ago       1.08GB
+osboxes@osboxes:~/project/security/project-auth-api$ docker run -d --name auth -p 8081:8081 --env API_HOST=172.18.0.2:8080 auth-api:v1.0
+4afaf8ef1f2f7554a54b9b168c6971ffd87ec2892db074f99ba403a19eca7a33
+osboxes@osboxes:~/project/security/project-auth-api$ docker ps-a
+docker: 'ps-a' is not a docker command.
+See 'docker --help'
+osboxes@osboxes:~/project/security/project-auth-api$ docker ps -a
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+4afaf8ef1f2f        auth-api:v1.0       "java -jar ./app/lib…"   14 seconds ago      Up 12 seconds       0.0.0.0:8081->8081/tcp   auth
+e637f198fce7        customer-api:v1.0   "java -jar ./app/lib…"   29 minutes ago      Up 29 minutes       0.0.0.0:8080->8080/tcp   customer-api
+osboxes@osboxes:~/project/security/project-auth-api$ docker exec -t auth sh
+/ # ls
+env
+exit
+^C
+osboxes@osboxes:~/project/security/project-auth-api$ docker network connect mcc-network auth
+osboxes@osboxes:~/project/security/project-auth-api$ docker inspect mcc-network
+[
+    {
+        "Name": "mcc-network",
+        "Id": "19889904902ca5eb17e9543c49fcc9287ccf1e7b1ae07390e3552634a58fdcd7",
+        "Created": "2020-10-16T13:38:28.014398847-04:00",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {
+            "4afaf8ef1f2f7554a54b9b168c6971ffd87ec2892db074f99ba403a19eca7a33": {
+                "Name": "auth",
+                "EndpointID": "80697449c7a1b10db2b4ab94b08fcf782e0aab34e380caaf497eeb667fea579f",
+                "MacAddress": "02:42:ac:12:00:03",
+                "IPv4Address": "172.18.0.3/16",
+                "IPv6Address": ""
+            },
+            "e637f198fce7bd4842a4a52a5d996e41824e206d73b44d5c1790ecbd64e7a8cb": {
+                "Name": "customer-api",
+                "EndpointID": "1abfe9d463a6c71c8b472cec174ad2a90c77dae1128818f2b218f5723005e3ec",
+                "MacAddress": "02:42:ac:12:00:02",
+                "IPv4Address": "172.18.0.2/16",
+                "IPv6Address": ""
+            }
+        },
+        "Options": {},
+        "Labels": {}
+    }
+]
+osboxes@osboxes:~/project/security/project-auth-api$ SomeCommand > SomeFile.txt
+SomeCommand: command not found
+osboxes@osboxes:~/project/security/project-auth-api$ command >somefile.txt
+osboxes@osboxes:~/project/security/project-auth-api$ ls
+bin  build  build.gradle  Dockerfile  Dockerfile.OLD  gradle  gradlew  gradlew.bat  pom.xml  settings.gradle  settings.gradle.001  somefile.txt  SomeFile.txt  src  target
+osboxes@osboxes:~/project/security/project-auth-api$ gedit somefile.txt
+osboxes@osboxes:~/project/security/project-auth-api$ gedit SomeFile.txt
+osboxes@osboxes:~/project/security/project-auth-api$ 
+
