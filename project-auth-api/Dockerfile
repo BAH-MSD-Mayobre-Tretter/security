@@ -22,4 +22,4 @@ ENV API_host=$targethost
 VOLUME /tmp
 ARG LIBS=app/build/libs
 COPY --from=builder ${LIBS}/ /app/libs
-ENTRYPOINT ["java","-jar","./app/libs/security-auth-0.0.1-SNAPSHOT"]
+ENTRYPOINT ["java","-jar","./app/libs/security-auth-0.0.1-SNAPSHOT.jar"]
