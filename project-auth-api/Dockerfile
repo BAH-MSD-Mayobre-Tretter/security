@@ -1,4 +1,6 @@
-FROM gradle:jdk10 as builder
+# SECURITY
+FROM gradle:6.6.1-jdk8 as builder
+USER root
 
 # Alternative from page 78 of lecture book
 # FROM openjkd:8
@@ -14,12 +16,13 @@ COPY --chown=gradle:gradle . /opt/my/service
 WORKDIR /opt/my/service
 
 
+
 RUN gradle bootJar
 FROM openjdk:8-jdk-alpine
-EXPOSE 8091
-ARG targethost=localhost:8090
-ENV API_host=$targethost
+EXPOSE 8081
+ARG targethost=localhost:8080
+ENV API_HOST=$targethost
 VOLUME /tmp
-ARG LIBS=app/build/libs
+ARG LIBS=/project-auth-api/build/libs
 COPY --from=builder ${LIBS}/ /app/lib
 ENTRYPOINT ["java","-jar","./app/lib/security-auth-0.0.1-SNAPSHOT.jar"]
