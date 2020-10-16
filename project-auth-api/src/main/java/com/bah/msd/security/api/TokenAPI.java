@@ -49,8 +49,8 @@ public class TokenAPI {
 		}
 		// bad request
 		
-		System.out.println("username is " + username);
-		System.out.println("password is " + password);
+		// System.out.println("username is " + username);
+		// System.out.println("password is " + password);
 		
 		return (ResponseEntity<?>) ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		
@@ -92,7 +92,7 @@ public class TokenAPI {
 		if(appUserToken == null || appUserToken.getToken() == null || appUserToken.getToken().length() == 0) {
 			appUserToken = createToken("ApiClientApp");
 		}
-		System.out.println("app user token = " + appUserToken);
+		// System.out.println("app user token = " + appUserToken);
 		return appUserToken;
 	}
 	
@@ -112,7 +112,7 @@ public class TokenAPI {
 		 * Date(System.currentTimeMillis() + fiveHoursInMillis)) .signWith(key)
 		 * .compact();
 		 */
-    	System.out.println("token created!!! token: " + token.toString());
+    	// System.out.println("token created!!! token: " + token.toString());
     	return token;
     }
     
@@ -123,20 +123,20 @@ public class TokenAPI {
 			URL url = new URL("http://localhost:8080/api/customers/byname/" + username);
 			
 			
-			System.out.println("Breadcrumbs for getCustomerByNameFromCustomerAPI");
-			System.out.println("Generate URL at " + url);
+		//	System.out.println("Breadcrumbs for getCustomerByNameFromCustomerAPI");
+		//	System.out.println("Generate URL at " + url);
 			
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json");
 			Token token = getAppUserToken();
 			
-			System.out.println("Generated token is " + token);
+		//	System.out.println("Generated token is " + token);
 			
 			conn.setRequestProperty("authorization", "Bearer " + token.getToken());
 			
-			System.out.println("Created connection is " + conn);
-			System.out.println("Response code for connection is " + conn.getResponseCode());
+		//	System.out.println("Created connection is " + conn);
+		//	System.out.println("Response code for connection is " + conn.getResponseCode());
 
 
 			if (conn.getResponseCode() != 200) {
@@ -149,7 +149,7 @@ public class TokenAPI {
 					output += out;
 				}
 				conn.disconnect();
-				System.out.println("Security API was able to get customer name from Customer API!!!");
+		//		System.out.println("Security API was able to get customer name from Customer API!!!");
 				return CustomerFactory.getCustomer(output);
 			}
 
