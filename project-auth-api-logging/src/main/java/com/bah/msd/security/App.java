@@ -15,10 +15,10 @@ public class App {
 		SpringApplication.run(App.class, args);
 	}
 
-@Bean
-public io.opentracing.Tracer jaegerTracer() {
-    return new Configuration("auth-api", new Configuration.SamplerConfiguration(ProbabilisticSampler.TYPE, 1),
-        new Configuration.ReporterConfiguration())
-        .getTracer();
-}
+	@Bean
+	public io.opentracing.Tracer jaegerTracer() {
+	    return new Configuration("auth-api", new Configuration.SamplerConfiguration(ProbabilisticSampler.TYPE, 1),
+	        new Configuration.ReporterConfiguration())
+	        .getTracer();
+	}
 }
